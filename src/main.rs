@@ -62,7 +62,7 @@ fn main() {
     let links: Vec<&str> = input.trim().split(',').map(|link| link.trim()).collect();
 
     // Ask for the desired citation format
-    println!("Enter the citation format you want (e.g., APA, Harvard, MLA):");
+    println!("Enter the citation format you want (APA, Harvard, MLA):");
     let mut format_input = String::new();
     io::stdin()
         .read_line(&mut format_input)
@@ -75,7 +75,9 @@ fn main() {
     // Check if the entered format is valid
     if let Some(desired_format) = format_map.get(&user_format) {
         // Make API requests for each link
-        request(links, desired_format);
+        if let Err(err) = request(links, desired_format) {
+            eprintln!("Error occurred: {:?}", err);
+        }
     } else {
         println!("Invalid format entered. Please try again with a valid format (e.g., APA, Harvard, MLA).");
     }
